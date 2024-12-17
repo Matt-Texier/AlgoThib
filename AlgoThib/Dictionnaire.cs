@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,14 @@ namespace AlgoThib
             }
             this.Dico = content;
             List<string> Dicolist = new List<string>();
-            List<List<string>> DicoListDeList = new List<List<string>>();
+            List<List<string>> DicoWithLen = new List<List<string>>();
+            // on assume que le taille maximum d'un mot est de 30 carateres
+            // on initialise la list de lits de string
+            for (int i = 0; i < 30; i++)
+            {
+                List<string> ListDeMots = new List<string>();
+                DicoWithLen.Add(ListDeMots);
+            }
             string a = string.Empty;
             for (int i = 0; i < content.Length; i++)
             {
@@ -40,10 +48,13 @@ namespace AlgoThib
                 if (content[i] == ' ')
                 {
                     Dicolist.Add(a);
+                    // on range les mots dans la tableau à lindex correspondant à sa taille
+                    DicoWithLen[a.Length].Add(a);
                     a = string.Empty;
                 }
             }
             this.dictionnaire = Dicolist;
+            this.dictionnaireList = DicoWithLen;
             string g = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             this.alphabet = g;
         }
@@ -108,10 +119,22 @@ namespace AlgoThib
 
         public void TriList()
         {
-            List<string> dicotrié = TriFusion(this.dictionnaire);
-            this.dictionnaire = dicotrié;
+            List<string> dicotrie = TriFusion(this.dictionnaire);
+            this.dictionnaire = dicotrie;
         }
 
+        public void TriListOfList()
+        {
+            for (int i = 0; i < this.dictionnaireList.Count; i++)
+            {
+                if(this.dictionnaireList[i].Count > 0)
+                {
+                    List<string> SortedList = TriFusion(this.dictionnaireList[i]);
+                    this.dictionnaireList[i] = SortedList;
+                }
+            }
+
+        }
         /*public void FirstPutDicoList()
         {
             List<List<string>> ListdeList = new List<List<string>>();
@@ -237,6 +260,35 @@ namespace AlgoThib
             int milieu = (debut + fin) / 2;
 
             int comparaison = string.Compare(mot, this.dictionnaire[milieu], StringComparison.Ordinal);
+
+            if (comparaison == 0)
+            {
+                return true;
+            }
+            else if (comparaison < 0)
+            {
+                return RechDicoRecursif(mot, debut, milieu - 1);
+            }
+            else if (comparaison > 0)
+            {
+                return RechDicoRecursif(mot, milieu + 1, fin);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool RechDicoOpt(string mot, int debut = 0, int fin = -3)
+        {
+            if (fin == -3)
+            { fin = this.dictionnaireList[mot.Length].Count; }
+            if (debut > fin)
+            { return false; }
+
+            int milieu = (debut + fin) / 2;
+
+            int comparaison = string.Compare(mot, this.dictionnaireList[mot.Length][milieu], StringComparison.Ordinal);
 
             if (comparaison == 0)
             {

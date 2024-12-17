@@ -14,8 +14,11 @@ internal class Program
         string b = Français.toString();
         Console.WriteLine(b);
         Français.TriList();
+        Français.TriListOfList();
         bool e = Français.RechDicoRecursif("TU");
         Console.WriteLine(e);
+        bool MyBool = Français.RechDicoOpt("TU");
+        Console.WriteLine("My Bool : " + MyBool);
         Lettres l1 = new Lettres();
         string f = l1.toString();
         Console.WriteLine(f);
@@ -30,6 +33,8 @@ internal class Program
         {
             bool z = Français.RechDicoRecursif(j);
             Console.WriteLine(z);
+            bool MyBoolDicoOpt = Français.RechDicoOpt(j);
+            Console.WriteLine("Recherche Dico Opt : "+MyBoolDicoOpt);
         }
     }
 }
